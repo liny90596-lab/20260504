@@ -12,6 +12,8 @@ function setup() {
   createCanvas(windowWidth, windowHeight);
   // 擷取攝影機影像
   capture = createCapture(VIDEO);
+  // 設定攝影機解析度，確保座標對應準確
+  capture.size(640, 480);
   // 隱藏預設的影片元件，只在畫布上顯示
   capture.hide();
   // 開始偵測臉部
@@ -38,8 +40,8 @@ function draw() {
   imageMode(CENTER);
   image(capture, 0, 0, displayW, displayH);
 
-  // 繪製指定的臉部線條
-  if (faces.length > 0) {
+  // 繪製指定的臉部線條，並確保影像寬高已讀取
+  if (faces.length > 0 && capture.width > 0) {
     let keypoints = faces[0].keypoints;
     // 定義多組點位序列（包含外唇與內唇）
     let paths = [
@@ -47,6 +49,7 @@ function draw() {
       [76, 77, 90, 180, 85, 16, 315, 404, 320, 307, 306, 408, 304, 303, 302, 11, 72, 73, 74, 184]
     ];
     
+    noFill();
     stroke('red');
     strokeWeight(1);
 
