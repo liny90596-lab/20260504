@@ -8,7 +8,7 @@ function preload() {
     // 載入 FaceMesh 模型
     faceMesh = ml5.faceMesh();
   } else {
-    console.error("ml5 函式庫未載入，請檢查網路連線或 index.html 中的 script 標籤。");
+    console.error("錯誤：ml5 函式庫未載入。請檢查網路連線，並確保已儲存 index.html。");
   }
 }
 
@@ -18,12 +18,12 @@ function setup() {
   // 擷取攝影機影像
   capture = createCapture(VIDEO);
   // 設定攝影機解析度，確保座標對應準確
-  capture.size(640, 480);
+  capture.size(640, 480); 
   // 隱藏預設的影片元件，只在畫布上顯示
   capture.hide();
   
   // 確保 faceMesh 物件存在再啟動偵測
-  if (faceMesh) {
+  if (faceMesh && capture) {
     // 開始偵測臉部
     faceMesh.detectStart(capture, gotFaces);
   }
@@ -34,6 +34,16 @@ function gotFaces(results) {
 }
 
 function draw() {
+  // 如果 ml5 沒載入，在畫面上顯示提示文字
+  if (typeof ml5 === 'undefined') {
+    background(255, 0, 0);
+    fill(255);
+    textSize(20);
+    textAlign(CENTER);
+    text("ml5.js 載入失敗，請檢查網路並使用 Live Server", width/2, height/2);
+    return;
+  }
+
   // 設定背景顏色
   background('#e7c6ff');
 
