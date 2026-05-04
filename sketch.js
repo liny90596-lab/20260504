@@ -3,8 +3,13 @@ let faceMesh;
 let faces = [];
 
 function preload() {
-  // 載入 FaceMesh 模型
-  faceMesh = ml5.faceMesh();
+  // 檢查 ml5 是否成功載入
+  if (typeof ml5 !== 'undefined') {
+    // 載入 FaceMesh 模型
+    faceMesh = ml5.faceMesh();
+  } else {
+    console.error("ml5 函式庫未載入，請檢查網路連線或 index.html 中的 script 標籤。");
+  }
 }
 
 function setup() {
@@ -16,8 +21,12 @@ function setup() {
   capture.size(640, 480);
   // 隱藏預設的影片元件，只在畫布上顯示
   capture.hide();
-  // 開始偵測臉部
-  faceMesh.detectStart(capture, gotFaces);
+  
+  // 確保 faceMesh 物件存在再啟動偵測
+  if (faceMesh) {
+    // 開始偵測臉部
+    faceMesh.detectStart(capture, gotFaces);
+  }
 }
 
 function gotFaces(results) {
